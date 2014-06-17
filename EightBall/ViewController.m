@@ -11,6 +11,7 @@
 @interface ViewController ()
 - (void)fadeFortune;
 - (void)newFortune;
+- (void)orientationChanged:(NSNotification*)notification;
 @end
 
 static NSString *gAnswers[] = {
@@ -26,10 +27,32 @@ static NSString *gAnswers[] = {
 
 @implementation ViewController
 
-- (void)viewDidLoad
+- (void)viewDidAppear:(BOOL)animated
 {
-    [super viewDidLoad];
+    [super viewDidAppear:animated];
 	// Do any additional setup after loading the view, typically from a nib.
+    
+    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(orientationChanged:) name:UIDeviceOrientationDidChangeNotification object:nil];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+    [super viewDidDisappear:animated];
+    
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+    [[UIDevice currentDevice] endGeneratingDeviceOrientationNotifications];
+}
+
+- (void)orientationChanged:(NSNotification*)notification {
+    switch ([UIDevice currentDevice].orientation) {
+        case UIDeviceOrientationFaceUp:
+            [self newFortune];
+            break;
+        default:
+            [self fadeFortune];
+            break;
+    }
 }
 
 - (void)didReceiveMemoryWarning
@@ -50,25 +73,6 @@ static NSString *gAnswers[] = {
     [UIView animateWithDuration:2.0 animations:^{
         self.answerView.alpha = 1.0;
     }];
-}
-
-// Motion methods
-- (void)motionBegan:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-    if (motion == UIEventSubtypeMotionShake) {
-        [self fadeFortune];
-    }
-}
-
-- (void)motionEnded:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-    if (motion == UIEventSubtypeMotionShake) {
-        [self newFortune];
-    }
-}
-
-- (void)motionCancelled:(UIEventSubtype)motion withEvent:(UIEvent *)event {
-    if (motion == UIEventSubtypeMotionShake) {
-        [self newFortune];
-    }
 }
 
 @end

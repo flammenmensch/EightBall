@@ -30,8 +30,6 @@
                                     <constraint firstAttribute="height" constant="112" id="4dR-Jk-eYa"/>
                                     <constraint firstAttribute="width" constant="160" id="REl-eb-lfA"/>
                                 </constraints>
-                                <string key="text">Shake for 
-answer</string>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="24"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
